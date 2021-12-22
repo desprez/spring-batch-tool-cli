@@ -1,0 +1,14 @@
+debug: false
+spring:
+   application:
+      name: batch-toolbox
+   datasource:
+      url: jdbc:postgresql://localhost:5432/batch-patterns
+      driver-class-name: org.postgresql.Driver
+      username: postgres
+      password: admin
+logging:
+   level:
+      root: info
+      org.springframework.batch: info
+      org.springframework.boot.autoconfigure.batch: debug
