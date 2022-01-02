@@ -1,6 +1,7 @@
 package springbatch.toolbox.app.cli.command;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Callable;
 
 import org.springframework.batch.core.repository.dao.AbstractJdbcBatchMetadataDao;
@@ -10,11 +11,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
+import picocli.CommandLine.Spec;
 
 @Component
 @Command(name = "purgehistory", description = "Delete data from Spring Batch Metadata tables that are N months old.")
 public class PurgeHistoryCommand implements Callable<Integer> {
+
+
 
 	/**
 	 * SQL statements removing step and job executions compared to a given date.
@@ -38,6 +43,9 @@ public class PurgeHistoryCommand implements Callable<Integer> {
 
 	private final String tablePrefix = DEFAULT_TABLE_PREFIX;
 
+	@Spec
+	CommandSpec spec;
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -50,25 +58,25 @@ public class PurgeHistoryCommand implements Callable<Integer> {
 	public Integer call() throws Exception {
 
 		final LocalDateTime dateTime = LocalDateTime.now().minusMonths(historyRetentionMonth);
-		//System.out.format("Remove the Spring Batch history before the %1$td-%1$tm-%1$ty", dateTime.format());
+		spec.commandLine().getOut().println("Remove the Spring Batch history before the " + dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
 		int rowCount = jdbcTemplate.update(getQuery(SQL_DELETE_BATCH_STEP_EXECUTION_CONTEXT), dateTime);
-		System.out.format("Deleted rows number from the BATCH_STEP_EXECUTION_CONTEXT table: %d", rowCount);
+		spec.commandLine().getOut().format("Deleted rows number from the BATCH_STEP_EXECUTION_CONTEXT table: %d %n", rowCount);
 
 		rowCount = jdbcTemplate.update(getQuery(SQL_DELETE_BATCH_STEP_EXECUTION), dateTime);
-		System.out.format("Deleted rows number from the BATCH_STEP_EXECUTION table: {}", rowCount);
+		spec.commandLine().getOut().format("Deleted rows number from the BATCH_STEP_EXECUTION table: %d %n", rowCount);
 
 		rowCount = jdbcTemplate.update(getQuery(SQL_DELETE_BATCH_JOB_EXECUTION_CONTEXT), dateTime);
-		System.out.format("Deleted rows number from the BATCH_JOB_EXECUTION_CONTEXT table: {}", rowCount);
+		spec.commandLine().getOut().format("Deleted rows number from the BATCH_JOB_EXECUTION_CONTEXT table: %d %n", rowCount);
 
 		rowCount = jdbcTemplate.update(getQuery(SQL_DELETE_BATCH_JOB_EXECUTION_PARAMS), dateTime);
-		System.out.format("Deleted rows number from the BATCH_JOB_EXECUTION_PARAMS table: {}", rowCount);
+		spec.commandLine().getOut().format("Deleted rows number from the BATCH_JOB_EXECUTION_PARAMS table: %d %n", rowCount);
 
 		rowCount = jdbcTemplate.update(getQuery(SQL_DELETE_BATCH_JOB_EXECUTION), dateTime);
-		System.out.format("Deleted rows number from the BATCH_JOB_EXECUTION table: {}", rowCount);
+		spec.commandLine().getOut().format("Deleted rows number from the BATCH_JOB_EXECUTION table: %d %n", rowCount);
 
 		rowCount = jdbcTemplate.update(getQuery(SQL_DELETE_BATCH_JOB_INSTANCE));
-		System.out.format("Deleted rows number from the BATCH_JOB_INSTANCE table: {}", rowCount);
+		spec.commandLine().getOut().format("Deleted rows number from the BATCH_JOB_INSTANCE table: %d %n", rowCount);
 
 		return 0;
 	}

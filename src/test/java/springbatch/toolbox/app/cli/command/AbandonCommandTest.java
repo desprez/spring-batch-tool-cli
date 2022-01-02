@@ -64,7 +64,7 @@ class AbandonCommandTest {
 	private Long fixtureWithJobExecution()
 			throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
 		final JobExecution newJobExecution = jobRepository.createJobExecution("jobTest", new JobParameters());
-		newJobExecution.setStatus(BatchStatus.STOPPED);
+		newJobExecution.setStatus(BatchStatus.STARTED);
 		jobRepository.update(newJobExecution);
 		return newJobExecution.getId();
 	}

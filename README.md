@@ -110,3 +110,25 @@ java -jar batch-toolbox.jar executions status 7 COMPLETED
 
 Done.
 ```
+
+## Purgehistory SubCommand
+
+**Usage**:  purgehistory [--months=<historyRetentionMonth>]
+
+Delete data from Spring Batch Metadata tables that are N months old.
+
+  --months=<historyRetentionMonth> the metadatas retention (in months)
+
+_Example_ :
+
+```
+java -jar batch-toolbox.jar purgehistory
+
+Remove the Spring Batch history before the 02-07-2021
+Deleted rows number from the BATCH_STEP_EXECUTION_CONTEXT table: 0
+Deleted rows number from the BATCH_STEP_EXECUTION table: 0
+Deleted rows number from the BATCH_JOB_EXECUTION_CONTEXT table: 0
+Deleted rows number from the BATCH_JOB_EXECUTION_PARAMS table: 0
+Deleted rows number from the BATCH_JOB_EXECUTION table: 0
+Deleted rows number from the BATCH_JOB_INSTANCE table: 0
+```
