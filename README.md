@@ -23,7 +23,7 @@ List all jobs, using H2 database
 java -D'spring.datasource.url=jdbc:h2:~/mts;AUTO_SERVER=TRUE' -jar batch-toolbox.jar jobs list
 ```
 
-Commands:
+**Commands**:
 -  help          Displays help information about the specified command
 -  jobs          Manage executed jobs.
 -  executions    Manage single execution instances.
@@ -32,11 +32,11 @@ Commands:
 
 ## Jobs SubCommand
 
-Usage:  jobs SUBCOMMAND
+**Usage**:  jobs SUBCOMMAND
 
 Manage executed jobs.
 
-Commands:
+**Commands**:
 -  help     Displays help information about the specified command
 -  list     List the name of all executed jobs.
 -  stop     Stop all running executions for the job.
@@ -44,7 +44,7 @@ Commands:
 
 ### List
 
-Usage:  jobs list
+**Usage**:  jobs list
 List the name of all executed jobs.
 
 _Example_ :
@@ -64,7 +64,7 @@ table2filesynchro-job
 
 ### Stop
 
-Usage:  jobs stop jobName
+**Usage**:  jobs stop jobName
 
 Stop all running executions for the job.
 
@@ -72,7 +72,7 @@ Stop all running executions for the job.
 
 ### Abandon
 
-Usage:  jobs abandon jobName
+**Usage**:  jobs abandon jobName
 
 Abandon all stopped executions for the job.
 
@@ -81,14 +81,14 @@ Abandon all stopped executions for the job.
 
 ## Executions SubCommand
 
-Usage:  executions SUBCOMMAND
+**Usage**:  executions SUBCOMMAND
 
 Manage single execution instances.
 
 This is an advanced feature, normally managing your job via 'jobs' command should be sufficient.
 Enter 'executions help SUBCOMMAND' to find out parameters for the specified subcommand.
 
-Commands:
+**Commands**:
 -  help    Displays help information about the specified command
 -  list    List all executions for the job.
 -  status  Set the status of the given execution.
@@ -103,7 +103,7 @@ ID      Start Time      End Time        Status  Parameters      Exit status
 7       2021-12-23 16:02:26.252 2021-12-23 16:02:26.694 COMPLETED       {output-dir=target\output, run.id=1}    exitCode=COMPLETED;exitDescription=
 ```
 
-Change Status aof the execution #7 to COMPLETED
+Change Status of the execution #7 to COMPLETED
 
 ```
 java -jar batch-toolbox.jar executions status 7 COMPLETED
