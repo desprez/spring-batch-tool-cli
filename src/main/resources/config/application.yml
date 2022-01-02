@@ -3,10 +3,14 @@ spring:
    application:
       name: batch-toolbox
    datasource:
+      type: org.springframework.jdbc.datasource.SimpleDriverDataSource
       url: jdbc:postgresql://localhost:5432/batch-patterns
       driver-class-name: org.postgresql.Driver
       username: postgres
       password: admin
+   batch:
+      job:
+         enabled: false
 logging:
    level:
       root: info
