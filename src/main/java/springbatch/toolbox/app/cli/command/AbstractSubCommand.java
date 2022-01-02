@@ -20,7 +20,7 @@ abstract class AbstractSubCommand {
 	protected JobRepository jobRepository;
 
 	@Autowired
-	private JobExplorer jobExplorer;
+	protected JobExplorer jobExplorer;
 
 	/**
 	 * Find all executions for the job identified by jobIdentifier.

@@ -30,6 +30,8 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-batch</artifactId>
+			<!-- <exclusions> <exclusion> <groupId>com.zaxxer</groupId> <artifactId>HikariCP</artifactId>
+				</exclusion> </exclusions> -->
 		</dependency>
 
 		<dependency>
@@ -60,6 +62,20 @@
 			<artifactId>spring-batch-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.integralblue</groupId>
+			<artifactId>log4jdbc-spring-boot-starter</artifactId>
+			<version>2.0.0</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
