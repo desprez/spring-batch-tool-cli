@@ -82,6 +82,9 @@ public class ListExecutionCommand implements Callable<Integer> {
 						"\t" + String.format("%d:%02d:%02d", duration / 3600, duration % 3600 / 60, duration % 60));
 			}
 			spec.commandLine().getOut().println();
+			//			for (final StepExecution stepExecution : jobExecution.getStepExecutions()) {
+			//				spec.commandLine().getOut().println(stepExecution.getSummary());
+			//			}
 		}
 
 		return 0;

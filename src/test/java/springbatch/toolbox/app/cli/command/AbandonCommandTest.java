@@ -54,10 +54,10 @@ class AbandonCommandTest {
 		final int exitCode = cmd.execute("jobTest");
 
 		// Then
-		assertThat(exitCode).isEqualTo(0);
+		assertThat(exitCode).isZero();
 		final JobExecution found = jobExplorer.getJobExecution(-1L);
 		assertThat(found.getStatus()).isEqualTo(BatchStatus.ABANDONED);
-
+		assertThat(jobExplorer.findRunningJobExecutions("jobTest")).isEmpty();;
 	}
 
 	@AfterAll

@@ -14,8 +14,15 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
+/**
+ * Special command used to Abandon an execution that has been abruptly stopped
+ * for which the status has been stuck at STARTED (because Spring Batch did not
+ * have a chance to update its status to FAILED with a graceful shutdown), then
+ * these command updates the status manually to ABANDONED and set its END_TIME
+ * to a non null value.
+ */
 @Component
-@Command(name = "abandon", description = "Abandon all stopped executions for the job.")
+@Command(name = "abandon", description = "Abandon all running executions for the job.")
 public class AbandonCommand extends AbstractSubCommand implements Callable<Integer> {
 
 	@Parameters(index = "0", paramLabel = "jobName", description = "The name of the job, which should abandoned.")
@@ -28,7 +35,7 @@ public class AbandonCommand extends AbstractSubCommand implements Callable<Integ
 	public Integer call() throws Exception {
 
 		final Set<JobExecution> jobExecutions = jobExplorer.findRunningJobExecutions(jobIdentifier);
-		if (jobExecutions == null) {
+		if (jobExecutions.isEmpty()) {
 			throw new JobExecutionNotRunningException("No running execution found for job=" + jobIdentifier);
 		}
 		for (final JobExecution jobExecution : jobExecutions) {
@@ -36,6 +43,7 @@ public class AbandonCommand extends AbstractSubCommand implements Callable<Integ
 
 			if (duration > hoursThreshold) {
 				jobExecution.setStatus(BatchStatus.ABANDONED);
+				jobExecution.setEndTime(jobExecution.getStartTime());
 				jobRepository.update(jobExecution);
 			}
 		}
