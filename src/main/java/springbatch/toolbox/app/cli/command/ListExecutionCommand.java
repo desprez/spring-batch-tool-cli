@@ -3,6 +3,7 @@ package springbatch.toolbox.app.cli.command;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
@@ -33,6 +34,9 @@ public class ListExecutionCommand implements Callable<Integer> {
 	@Option(names = "--printExit", description = "Print exit status of the execution.")
 	private boolean printExit;
 
+	@Option(names = "--printDuration", description = "Print the duration of the execution.")
+	private boolean printDuration;
+
 	@Autowired
 	private JobExplorer jobExplorer;
 
@@ -45,6 +49,9 @@ public class ListExecutionCommand implements Callable<Integer> {
 		}
 		if (printExit) {
 			spec.commandLine().getOut().print("\tExit status");
+		}
+		if (printDuration) {
+			spec.commandLine().getOut().print("\tDuration");
 		}
 		spec.commandLine().getOut().println();
 		final List<JobExecution> jobExecutions = new LinkedList<>();
@@ -65,6 +72,14 @@ public class ListExecutionCommand implements Callable<Integer> {
 			}
 			if (printExit) {
 				spec.commandLine().getOut().print("\t" + jobExecution.getExitStatus());
+			}
+			if (printDuration && jobExecution.getEndTime() != null) {
+				final long duration = TimeUnit.SECONDS.convert(
+						jobExecution.getEndTime().getTime() - jobExecution.getStartTime().getTime(),
+						TimeUnit.MILLISECONDS);
+
+				spec.commandLine().getOut().print(
+						"\t" + String.format("%d:%02d:%02d", duration / 3600, duration % 3600 / 60, duration % 60));
 			}
 			spec.commandLine().getOut().println();
 		}

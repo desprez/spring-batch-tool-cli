@@ -27,6 +27,7 @@ import springbatch.toolbox.app.cli.SpringBatchCli;
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = NONE, classes = SpringBatchCli.class)
 @TestInstance(Lifecycle.PER_CLASS)
+@Sql({ "/list-execution-h2.sql" })
 class ListExecutionCommandTest {
 
 	@Autowired
@@ -44,27 +45,23 @@ class ListExecutionCommandTest {
 	@Autowired
 	JobRepositoryTestUtils jobRepositoryTestUtils;
 
-	@Sql({ "/list-execution-h2.sql" })
 	@Test
 	void list_executions_command_should_success()
 			throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
 		// Given
 		final CommandLine cmd = new CommandLine(listExecutionCommand, factory);
 
-		//jobRepository.createJobExecution("jobTest", new JobParameters());
-
 		final StringWriter sw = new StringWriter();
 		cmd.setOut(new PrintWriter(sw));
 
 		// When
-		final int exitCode = cmd.execute("jobTest", "--printParams", "--printExit");
+		final int exitCode = cmd.execute("jobTest", "--printParams", "--printExit", "--printDuration");
 
 		// Then
 		assertThat(exitCode).isEqualTo(0);
 		assertThat(sw.toString())
-		.isEqualToIgnoringNewLines(
-				"ID	Start Time	End Time	Status	Parameters	Exit status\r\n" +
-				"-1	2021-05-01 00:00:00.0	2021-05-01 00:00:00.0	COMPLETED	{param=value}	exitCode=COMPLETED;exitDescription=\r\n");
+		.isEqualToIgnoringNewLines("ID	Start Time	End Time	Status	Parameters	Exit status	Duration\r\n"
+				+ "-1	2021-05-01 00:00:00.0	2021-05-02 00:00:00.0	COMPLETED	{param=value}	exitCode=COMPLETED;exitDescription=	24:00:00\r\n");
 	}
 
 	@AfterAll

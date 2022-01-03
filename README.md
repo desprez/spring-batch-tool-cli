@@ -30,7 +30,7 @@ java -D'spring.datasource.url=jdbc:h2:~/mts;AUTO_SERVER=TRUE' -jar batch-toolbox
 -  purgehistory  Delete data from Spring Batch Metadata tables that are N months old.
 
 
-## Jobs SubCommand
+## Jobs Commands
 
 **Usage**:  jobs SUBCOMMAND
 
@@ -79,7 +79,7 @@ Abandon all stopped executions for the job.
    _jobName_   The name of the job, which should abandoned.
 
 
-## Executions SubCommand
+## Executions Commands
 
 **Usage**:  executions SUBCOMMAND
 
@@ -89,9 +89,20 @@ This is an advanced feature, normally managing your job via 'jobs' command shoul
 Enter 'executions help SUBCOMMAND' to find out parameters for the specified subcommand.
 
 **Commands**:
--  help    Displays help information about the specified command
--  list    List all executions for the job.
--  status  Set the status of the given execution.
+-  help		Displays help information about the specified command
+-  list		List all executions for the job.
+-  status	Set the status of the given execution.
+
+
+### List
+
+**Usage**:  executions list [--printDuration] [--printExit] [--printParams] jobName
+
+List all executions for the job.
+-    jobName			The name of the job, which executions should managed.
+-    --printDuration	Print the duration of the execution.
+-    --printExit		Print exit status of the execution.
+-    --printParams		Print the parameters of the execution.
 
 _Example_ :
 
@@ -103,6 +114,16 @@ ID      Start Time      End Time        Status  Parameters      Exit status
 7       2021-12-23 16:02:26.252 2021-12-23 16:02:26.694 COMPLETED       {output-dir=target\output, run.id=1}    exitCode=COMPLETED;exitDescription=
 ```
 
+### Status
+
+**Usage**:  executions status executionId status
+
+Set the status of the given execution.
+-    executionId	ID of the execution to modify.
+-    status			The new status you wish the execution to set to.
+
+_Example_ :
+
 Change Status of the execution #7 to COMPLETED
 
 ```
@@ -111,13 +132,13 @@ java -jar batch-toolbox.jar executions status 7 COMPLETED
 Done.
 ```
 
-## Purgehistory SubCommand
+## Purgehistory Command
 
 **Usage**:  purgehistory [--months=<historyRetentionMonth>]
 
 Delete data from Spring Batch Metadata tables that are N months old.
 
-  --months=<historyRetentionMonth> the metadatas retention (in months)
+-  --months=<historyRetentionMonth> the metadatas retention (in months)
 
 _Example_ :
 
